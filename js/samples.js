@@ -1,5 +1,5 @@
 // init values
-CURR_SAMPLES = ['indigo', 'darkolivegreen', 'hotpink', 'lightcyan', 'fuchsia', 'chocolate', 'darkslateblue', 'wheat'];
+CURR_SAMPLES = ['indigo', 'darkolivegreen', 'hotpink', 'wheat', 'fuchsia', 'chocolate', 'lightcyan', 'darkslateblue'];
 
 SAMPLES = [
     new Object({ 'id':'aliceblue', 'color': '#F0F8FF', 'colors':[0xf0,0xf8,0xff] }),
