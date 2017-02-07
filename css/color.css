@@ -47,6 +47,7 @@
     width: 15%;
     display: inline-block;
     margin: 0 2px;
+    border: white solid 2px;
 }
 
 .recipe_symbol {
