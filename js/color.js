@@ -93,9 +93,9 @@ function value_to_range(v) {
 }
 
 function create_recipe(o) {
-    recipe = '<div class="recipe_circle" style="background-color:#cc0000"><div class="recipe_symbol">' + value_to_range(o.colors[0]) + '</div></div>+'
-    recipe += '<div class="recipe_circle" style="background-color:#00cc00"><div class="recipe_symbol">' + value_to_range(o.colors[1]) + '</div></div>+'
-    recipe += '<div class="recipe_circle" style="background-color:#0000cc"><div class="recipe_symbol">' + value_to_range(o.colors[2]) + '</div></div>='
+    recipe = '<div class="recipe_circle" style="background-color:#cc0000; background:radial-gradient(#ff0000, #7f0000)"><div class="recipe_symbol">' + value_to_range(o.colors[0]) + '</div></div>+'
+    recipe += '<div class="recipe_circle" style="background-color:#00cc00; background:radial-gradient(#00ff00, #007f00)"><div class="recipe_symbol">' + value_to_range(o.colors[1]) + '</div></div>+'
+    recipe += '<div class="recipe_circle" style="background-color:#0000cc; background:radial-gradient(#0000ff, #00007f)"><div class="recipe_symbol">' + value_to_range(o.colors[2]) + '</div></div>='
     recipe += '<div class="recipe_circle" style="background-color:' + o.color + '"><div class="recipe_symbol" style="color:' + o.color + '">:)</div></div>'
 
     return recipe; 
