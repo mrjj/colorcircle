@@ -29,6 +29,15 @@ function to_init_color(color, value) {
     }
 }
 
+function value_to_range(v) {
+    if (v<10)
+        ret = 0;
+    else
+        ret = Math.floor((v-10)/25);
+
+    return ret;
+}
+
 function sel_clicked() {
     // switch border
     current_bordered = $(this).parent().find(".bordered")
@@ -47,6 +56,7 @@ function sel_clicked() {
 
     wcolor = tocolor(wish[0], wish[1], wish[2]);
     $('#cc').css('background-color', wcolor);
+//    $('#help').css('background-color', wcolor);
     $('#cc').prop('title', wcolor);
 }
 
@@ -83,14 +93,7 @@ function create_samples() {
     }
 }
 
-function value_to_range(v) {
-    if (v<10)
-        ret = 0;
-    else
-        ret = Math.floor((v-10)/25);
 
-    return ret;
-}
 
 function create_recipe(o) {
     recipe = '<div class="recipe_circle" style="background-color:#cc0000; background:radial-gradient(#ff0000, #7f0000)"><div class="recipe_symbol">' + value_to_range(o.colors[0]) + '</div></div>+'
