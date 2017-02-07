@@ -30,6 +30,7 @@ function to_init_color(color, value) {
 }
 
 function value_to_range(v) {
+    // IMPROVEMENT: return v < 10 ? 0 : Math.floor((v - 10)/25);
     if (v<10)
         ret = 0;
     else
@@ -40,20 +41,31 @@ function value_to_range(v) {
 
 function sel_clicked() {
     // switch border
+    // желательно в начале переменных ставить var, браузер съест и такой вариант, но он нарушает стандарт и в некоторых случаях может выстрелить в ног
+
+    // можно без переменной в одну строку: 
+    // $(this).parent().find(".bordered").removeClass('bordered')
+    // в продакшен коде прикопали бы выбранный элемент в переменную $selected чтобы лишний раз не ползать по DOM дереву .find-ом
     current_bordered = $(this).parent().find(".bordered")
     current_bordered.removeClass('bordered')
     $(this).addClass('bordered')
 
     // recolor circle
+    // достаточно написать var wish = [], массив будет замозаполянться по мере добавления индексов, после 10000к значений он прозрачно конвертируется в sparse array
     wish = Array(0,0,0);
+    
+    // Можно так:
+    //var wish = COLORS.map(function (c) {
+    //  var rSelected = $('#' + color + '-selector').find(".bordered")[0]
+    //  return 25 * r_selected.id.replace(color, '') + 10;
+    //})
     for (c=0; c<COLORS.length; c++) {
         color = COLORS[c];
-
         r_selected = $('#' + color + '-selector').find(".bordered")[0]
         v = r_selected.id.replace(color, '')
-        wish[c] = 25*v + 10;
+        return 25 * r_selected.id.replace(color, '') + 10;
     }
-
+    // как альтернативный вариант, можно передавать массив и разворачивать его уже внутри функции
     wcolor = tocolor(wish[0], wish[1], wish[2]);
     $('#cc').css('background-color', wcolor);
 //    $('#help').css('background-color', wcolor);
@@ -64,7 +76,7 @@ function create_selectors() {
     for (c=0; c<COLORS.length; c++) {
         color = COLORS[c];
         div_html = ''
-
+        // map -> join позволит обойтись без пары переменных
         for (i=0; i<10; i++) {
             div_html += '<div class="selelem" id="' + color + i +'"></div>'
         }
@@ -80,13 +92,25 @@ function create_selectors() {
 }
 
 function get_sample_by_id(id) {
+    // А откуда переменная SAMPLES берется в контексте? Не очень хорошо, когда контекст где-то за пределами гуляет
+    // indexOf будет лучше, ты уже об этом знаешь
+    // Я бы вместо этой функции сконвертировал SAMPLES в словарь и обращался бы к нему дальше в коде:
+    // var samplesDict = {}; 
+    // Object.keys(SAMPLES).forEach(function (sId) { samplesDict[sId] = SAMPLES[sId]; });
+    
     return SAMPLES.find( item => {return item.id == id} )
+    
 }
 
 function create_samples() {
     for (i=0; i<CURR_SAMPLES.length; i++) {
         sample = get_sample_by_id(CURR_SAMPLES[i]);
         sample_id = '#sample'+i;
+        // можно чейнить, это будет работать быстрее и выглядеть компактнее:
+        // $(sample_id)
+        //      .css('background-color', sample.color)
+        //      .prop('title', sample.id)
+        //      .data('cid', sample.id);
         $(sample_id).css('background-color', sample.color);
         $(sample_id).prop('title', sample.id);
         $(sample_id).data('cid', sample.id);
@@ -109,6 +133,8 @@ function get_random_sample() {
     return SAMPLES[index];
 }
 
+// есть удобная практика переменные, в которые передаются jQuery объекты назвать начиная с $, пример сигнатуры:
+// function redraw_sample($who) {
 function redraw_sample(who) {
     for (;;) {
         sample = get_random_sample()
@@ -126,7 +152,7 @@ function redraw_sample(who) {
 
 function sample_clicked() {
     var help_text = ''
-
+    // переменная не особо нужна, можно прям в условии
     so = get_sample_by_id($(this).data().cid)
     $('.help').show();
 
