@@ -1,10 +1,4 @@
 COLORS=['red', 'green', 'blue'];
-SAMPLES = [
-    new Object({ 'id':'indigo', 'color': '#4B0082', 'colors':[0x4b, 0x00, 0x82], 'name':'индиго'}),
-    new Object({ 'id':'darkolivegreen', 'color': '#556B2F', 'colors':[0x55, 0x6b, 0x2f], 'name':'оливковый'}),
-    new Object({ 'id':'hotpink', 'color': '#FF69B4', 'colors':[0xff, 0x69, 0xb4], 'name': 'розовый'}),
-    new Object({ 'id':'lightcyan', 'color': '#E0FFFF', 'colors':[0xe0, 0xff, 0xff], 'name':'светлый циан'})
-];
 
 function tohex(x) {
     x = parseInt(x);
@@ -75,11 +69,17 @@ function create_selectors() {
     }
 }
 
+function get_sample_by_id(id) {
+    return SAMPLES.find( item => {return item.id == id} )
+}
+
 function create_samples() {
-    for (i=0; i<SAMPLES.length; i++) {
-        sample = SAMPLES[i];
-        $('#'+sample.id).css('background-color', sample.color);
-        $('#'+sample.id).prop('title', sample.name);
+    for (i=0; i<CURR_SAMPLES.length; i++) {
+        sample = get_sample_by_id(CURR_SAMPLES[i]);
+        sample_id = '#sample'+i;
+        $(sample_id).css('background-color', sample.color);
+        $(sample_id).prop('title', sample.id);
+        $(sample_id).data('cid', sample.id);
     }
 }
 
@@ -101,10 +101,30 @@ function create_recipe(o) {
     return recipe; 
 }
 
+function get_random_sample() {
+    index = Math.floor(Math.random() * SAMPLES.length)
+    return SAMPLES[index];
+}
+
+function redraw_sample(who) {
+    for (;;) {
+        sample = get_random_sample()
+        if (CURR_SAMPLES.indexOf(sample.id) == -1)
+            break
+    }
+
+    CURR_SAMPLES.splice(CURR_SAMPLES.indexOf(who.title), 1);
+    CURR_SAMPLES.push(sample.id);
+
+    who.css('background-color', sample.color);
+    who.prop('title', sample.id);
+    who.data('cid', sample.id);
+}
+
 function sample_clicked() {
     var help_text = ''
 
-    so = SAMPLES.find( item => {return item.id == this.id} )
+    so = get_sample_by_id($(this).data().cid)
     $('.help').show();
 
     if (so) {
@@ -112,6 +132,8 @@ function sample_clicked() {
         var cw = $('.recipe_circle').width();
         $('.recipe_circle').css({'height':cw+'px'});
     }
+
+    redraw_sample($(this));
 }
 
 
